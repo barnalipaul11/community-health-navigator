@@ -2,7 +2,7 @@
 import React from 'react';
 import Layout from '../components/Layout';
 import ChatBot from '../components/ChatBot';
-import { MessageCircle, ThumbsUp, AlertCircle } from 'lucide-react';
+import { MessageCircle, ThumbsUp, AlertCircle, Sparkles } from 'lucide-react';
 
 const ChatbotPage: React.FC = () => {
   return (
@@ -13,6 +13,10 @@ const ChatbotPage: React.FC = () => {
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             Get immediate medical guidance, find healthcare facilities, and learn about medical camps in your area.
           </p>
+          <div className="flex items-center justify-center mt-2">
+            <Sparkles size={16} className="text-yellow-500 mr-1" />
+            <span className="text-sm text-gray-600">Now with Gemini AI integration for enhanced responses</span>
+          </div>
         </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -55,6 +59,16 @@ const ChatbotPage: React.FC = () => {
                   <div className="ml-3">
                     <h4 className="font-medium text-gray-900">Discover Medical Camps</h4>
                     <p className="text-gray-600 text-sm">Inquire about medical camps and vaccination drives happening in your community.</p>
+                  </div>
+                </div>
+                
+                <div className="flex">
+                  <div className="flex-shrink-0 mt-1">
+                    <Sparkles size={20} className="text-yellow-500" />
+                  </div>
+                  <div className="ml-3">
+                    <h4 className="font-medium text-gray-900">Gemini AI Integration</h4>
+                    <p className="text-gray-600 text-sm">Enable Gemini AI for more detailed and comprehensive medical information and recommendations.</p>
                   </div>
                 </div>
               </div>
