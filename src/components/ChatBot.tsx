@@ -40,20 +40,25 @@ const ChatBot: React.FC = () => {
     setIsLoading(true);
 
     // Check for location in user message
-    if (userMessage.content.includes('location') || userMessage.content.includes('zip')) {
-      setLocation(userMessage.content.replace(/[^0-9]/g, ''));
+    if (input.toLowerCase().includes('location') || input.toLowerCase().includes('zip')) {
+      const zipMatch = input.match(/\b\d{5}\b/);
+      if (zipMatch) {
+        setLocation(zipMatch[0]);
+      }
     }
 
     try {
       if (useGemini) {
         // Use Gemini API for more complex responses
-        const geminiResponse = await generateGeminiResponse(userMessage.content);
+        console.log('Using Gemini API for response');
+        const geminiResponse = await generateGeminiResponse(input);
         
         if (geminiResponse.error) {
+          console.error('Gemini API error:', geminiResponse.error);
           toast.error(geminiResponse.error);
           
           // Fallback to basic response
-          const basicResponse = getBasicResponse(userMessage.content, location);
+          const basicResponse = getBasicResponse(input, location);
 
           // Add basic fallback response
           const fallbackMessage: Message = {
@@ -64,6 +69,7 @@ const ChatBot: React.FC = () => {
           
           setMessages(prev => [...prev, fallbackMessage]);
         } else {
+          console.log('Gemini response received:', geminiResponse.text);
           // Add Gemini response
           const botMessage: Message = {
             content: geminiResponse.text,
@@ -75,9 +81,10 @@ const ChatBot: React.FC = () => {
           setMessages(prev => [...prev, botMessage]);
         }
       } else {
+        console.log('Using basic response logic');
         // Use basic response logic
         setTimeout(() => {
-          const botResponse = getBasicResponse(userMessage.content, location);
+          const botResponse = getBasicResponse(input, location);
 
           const botMessage: Message = {
             content: botResponse,
@@ -86,7 +93,7 @@ const ChatBot: React.FC = () => {
           };
 
           setMessages(prev => [...prev, botMessage]);
-        }, 1500);
+        }, 1000);
       }
     } catch (error) {
       console.error('Error processing message:', error);

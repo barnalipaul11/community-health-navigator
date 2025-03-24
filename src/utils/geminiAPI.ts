@@ -25,6 +25,8 @@ export const generateGeminiResponse = async (prompt: string): Promise<GeminiResp
   }
 
   try {
+    console.log('Calling Gemini API with prompt:', prompt);
+    
     const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent', {
       method: 'POST',
       headers: {
@@ -72,6 +74,7 @@ export const generateGeminiResponse = async (prompt: string): Promise<GeminiResp
 
     if (!response.ok) {
       const errorData = await response.json();
+      console.error('Gemini API error response:', errorData);
       return {
         text: '',
         error: `API Error: ${errorData.error?.message || 'Unknown error'}`
@@ -79,6 +82,7 @@ export const generateGeminiResponse = async (prompt: string): Promise<GeminiResp
     }
 
     const data = await response.json();
+    console.log('Gemini API successful response:', data);
     
     // Extract the response text from the Gemini API response
     const responseText = data.candidates?.[0]?.content?.parts?.[0]?.text || 

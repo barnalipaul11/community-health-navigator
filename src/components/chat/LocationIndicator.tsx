@@ -7,7 +7,7 @@ interface LocationIndicatorProps {
 }
 
 const LocationIndicator: React.FC<LocationIndicatorProps> = ({ location }) => {
-  if (!location) return null;
+  if (!location || location.trim() === '') return null;
   
   return (
     <div className="px-4 py-2 bg-gray-50 border-t border-gray-100 flex items-center">
