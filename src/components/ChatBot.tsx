@@ -22,9 +22,9 @@ const ChatBot: React.FC = () => {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [location, setLocation] = useState('');
-  const [apiKey, setApiKey] = useState(getGeminiApiKey());
-  const [showApiKeyInput, setShowApiKeyInput] = useState(!getGeminiApiKey());
-  const [useGemini, setUseGemini] = useState(Boolean(getGeminiApiKey()));
+  
+  // Initialize with Gemini API enabled by default
+  const [useGemini, setUseGemini] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Sample responses - in a real app, these would come from an AI service
@@ -55,30 +55,7 @@ const ChatBot: React.FC = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const handleApiKeyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setApiKey(e.target.value);
-  };
-
-  const saveApiKey = () => {
-    if (apiKey.trim()) {
-      setGeminiApiKey(apiKey.trim());
-      setUseGemini(true);
-      setShowApiKeyInput(false);
-      toast.success("API key saved! Gemini AI is now active.");
-    } else {
-      toast.error("Please enter a valid API key");
-    }
-  };
-
-  const toggleApiKeyInput = () => {
-    setShowApiKeyInput(!showApiKeyInput);
-  };
-
   const toggleGemini = () => {
-    if (!getGeminiApiKey() && !useGemini) {
-      setShowApiKeyInput(true);
-      return;
-    }
     setUseGemini(!useGemini);
     toast(useGemini ? "Switched to basic responses" : "Switched to Gemini AI for enhanced responses");
   };
@@ -103,7 +80,7 @@ const ChatBot: React.FC = () => {
     }
 
     try {
-      if (useGemini && getGeminiApiKey()) {
+      if (useGemini) {
         // Use Gemini API for more complex responses
         const geminiResponse = await generateGeminiResponse(userMessage.content);
         
@@ -208,49 +185,6 @@ const ChatBot: React.FC = () => {
           {useGemini ? 'Using Gemini AI' : 'Basic Mode'}
         </button>
       </div>
-
-      {/* API Key Input Dialog */}
-      {showApiKeyInput && (
-        <div className="p-4 bg-gray-50 border-b border-gray-200">
-          <div className="flex flex-col">
-            <div className="flex items-start mb-2">
-              <AlertTriangle size={16} className="text-yellow-500 mr-2 mt-1" />
-              <p className="text-sm text-gray-700">
-                Please enter your Gemini API key to enable advanced AI responses. 
-                <a 
-                  href="https://ai.google.dev/tutorials/setup" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-healthcare-blue hover:underline ml-1"
-                >
-                  Get an API key
-                </a>
-              </p>
-            </div>
-            <div className="flex">
-              <input
-                type="password"
-                value={apiKey}
-                onChange={handleApiKeyChange}
-                placeholder="Enter Gemini API key"
-                className="flex-grow px-3 py-2 border border-gray-300 rounded-l focus:outline-none focus:ring-2 focus:ring-healthcare-blue"
-              />
-              <button
-                onClick={saveApiKey}
-                className="px-4 py-2 bg-healthcare-blue text-white rounded-r hover:bg-healthcare-blue-dark"
-              >
-                Save
-              </button>
-            </div>
-            <button 
-              onClick={toggleApiKeyInput}
-              className="text-xs text-gray-500 hover:text-gray-700 mt-2 self-end"
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      )}
 
       {/* Chat messages */}
       <div className="flex-grow p-4 overflow-y-auto bg-gray-50">

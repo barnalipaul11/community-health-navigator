@@ -1,7 +1,7 @@
 
 // A placeholder for the Gemini API key
 // In a production app, this should be handled securely via environment variables or Supabase Secrets
-let geminiApiKey = '';
+let geminiApiKey = 'AIzaSyCmgxi0ZIv_2n4ax-umI2i7wPhvZ5hYG1g';
 
 export const setGeminiApiKey = (apiKey: string) => {
   geminiApiKey = apiKey;
